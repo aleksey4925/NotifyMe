@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <main class="row g-0 justify-content-center my-auto">
+        <div class="px-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
+            <div class="p-3 border border-3 border-success rounded-4 bg-success-subtle">
+                <form class="row g-0">
+                    <div class="mb-2">
+                        <label for="login" class="form-label">Логин</label>
+                        <input type="text" id="login" class="form-control" placeholder="johndoe">
+                    </div>
+                    <div class="mb-5">
+                        <label for="password" class="form-label">Пароль</label>
+                        <input type="password" id="password" class="form-control" placeholder="********">
+                    </div>
+                    <div class="text-center text-sm-start">
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">Войти</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

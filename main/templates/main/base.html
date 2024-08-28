@@ -16,7 +16,7 @@
 <body>
     <div class="container g-0">
         <div class="d-flex flex-column min-vh-100">
-            <nav class="navbar navbar-expand-md bg-body-tertiary">
+            <nav class="navbar navbar-expand-sm bg-body-tertiary">
                 <div class="container-fluid">
                     <a class="navbar-brand fw-medium text-uppercase" href="{% url "main:index" %}">Главная</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -30,26 +30,20 @@
                                 <a class="nav-link" href="{% url "main:about" %}">О приложении</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./projects.html">Проекты</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./create_project.html">Создание проекта</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="./add_chat.html">Добавление чатов</a>
+                                <a class="nav-link" href="{% url "projects:index" %}">Проекты</a>
                             </li>
                         </ul>
                         <div id="signin">
-                            <div class="d-none d-md-flex">
+                            <div class="d-none d-sm-flex">
                                 <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
-                                    href="./login.html" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    href="{% url "users:signin" %}" data-bs-toggle="tooltip" data-bs-placement="left"
                                     data-bs-title="Вход">
                                     <div class="icon-enter fs-3"></div>
                                 </a>
                             </div>
-                            <div class="d-block d-md-none">
+                            <div class="d-block d-sm-none">
                                 <div class="text-center py-2">
-                                    <a href="./login.html"
+                                    <a href="{% url "users:signin" %}"
                                         class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-medium">
                                         Вход
                                     </a>
@@ -57,14 +51,14 @@
                             </div>
                         </div>
                         <div id="signout" class="d-none">
-                            <div class="d-none d-md-flex">
+                            <div class="d-none d-sm-flex">
                                 <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
                                     href="./login.html" data-bs-toggle="tooltip" data-bs-placement="left"
                                     data-bs-title="Выход">
                                     <div class="icon-exit fs-3"></div>
                                 </a>
                             </div>
-                            <div class="d-block d-md-none">
+                            <div class="d-block d-sm-none">
                                 <div class="text-center py-2">
                                     <a href="./login.html"
                                         class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-medium">

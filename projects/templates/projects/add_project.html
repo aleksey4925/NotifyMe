@@ -1,0 +1,37 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <main class="row g-0 justify-content-center my-auto">
+        <div class="px-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
+            <div class="p-3 border border-3 border-success rounded-4 bg-success-subtle">
+                <form class="row g-0">
+                    <div class="mb-2">
+                        <label for="project_name" class="form-label">Название проекта</label>
+                        <input type="text" id="project_name" class="form-control" placeholder="стройтепло">
+                    </div>
+                    <div class="mb-2">
+                        <label for="system" class="form-label">Система</label>
+                        <select id="system" class="form-select">
+                            <option selected>Выберите</option>
+                            <option value="1">яндекс.директ</option>
+                            <option value="2">гугл эдс</option>
+                            <option value="3">яндекс директ</option>
+                            <option value="4">vk ads</option>
+                        </select>
+                    </div>
+                    <div class="mb-2">
+                        <label for="login" class="form-label">Логин</label>
+                        <input type="email" id="login" class="form-control">
+                    </div>
+                    <div class="mb-5">
+                        <label for="step" class="form-label">Порог</label>
+                        <input type="number" id="step" class="form-control">
+                    </div>
+                    <div class="text-center text-sm-start">
+                        <button type="submit" class="btn btn-primary px-5 fw-bold">Далее</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}

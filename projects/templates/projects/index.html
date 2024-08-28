@@ -1,0 +1,189 @@
+{% extends "main/base.html" %}
+
+{% block content %}
+    <main class="row g-0 gap-2 justify-content-center my-5 px-1">
+        <div class="col-auto ms-md-auto">
+            <a href="{% url "projects:add_project" %}" class="d-none d-md-inline-block btn btn-primary" data-bs-toggle="tooltip"
+                data-bs-placement="left" data-bs-title="Добавить проект"><span class="icon-plus"></span></a>
+            <a href="{% url "projects:add_project" %}" class="d-inline-block d-md-none btn btn-primary">Добавить проект</a>
+        </div>
+        <div class="w-100"></div>
+        <div class="col-12 text-center lh-sm">
+            <div class="table-responsive">
+                <table class="table table-bordered border-success table-striped align-middle w-100">
+                    <tr>
+                        <th class="bg-success text-white">№</th>
+                        <th class="bg-success text-white w-25">Название</th>
+                        <th class="bg-success text-white">Система</th>
+                        <th class="bg-success text-white">Логин</th>
+                        <th class="bg-success text-white">Баланс</th>
+                        <th class="bg-success text-white">Порог</th>
+                        <th class="bg-success text-white">Действия</th>
+                    </tr>
+                    <tr>
+                        <td class="">1</td>
+                        <td class="w-25">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div class="mb-1">СтройТепло</div>
+                                <span class="text-danger fw-bold"></span>
+                            </div>
+                        </td>
+                        <td>яндекс.директ</td>
+                        <td>sdfsd@yandex.ru</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-around">
+                                <span class="col-md-auto text-danger fs-5 mb-2 mb-lg-0">1500</span>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-title="Обновить баланс">
+                                        <span class="icon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>2000</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-center">
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                                    <a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Изменить</a>
+                                </div>
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0"><a href="{% url "projects:chats" project_id=1 %}"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Чаты</a>
+                                </div>
+                                <div class="col-auto"><a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">В
+                                        архив</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-success border border-success">
+                        <td>2</td>
+                        <td class="w-25">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div class="mb-1">стройТепло</div>
+                                <span class="text-danger fw-bold"></span>
+                            </div>
+                        </td>
+                        <td>гугл эдс</td>
+                        <td>fsdcsff@GMAIL.COM</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-around">
+                                <span class="col-md-auto mb-2 mb-lg-0">6134</span>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-title="Обновить баланс">
+                                        <span class="icon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>5000</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-center">
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                                    <a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Изменить</a>
+                                </div>
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0"><a href="{% url "projects:chats" project_id=2 %}"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Чаты</a>
+                                </div>
+                                <div class="col-auto"><a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">В
+                                        архив</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td class="w-25">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div class="mb-1">красный кирпич</div>
+                                <span class="text-danger fw-bold"></span>
+                            </div>
+                        </td>
+                        <td>яндекс директ</td>
+                        <td>sdfsd@yandex.ru</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-around">
+                                <span class="col-md-auto mb-2 mb-lg-0">43234</span>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-title="Обновить баланс">
+                                        <span class="icon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>20000</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-center">
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                                    <a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Изменить</a>
+                                </div>
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0"><a href="{% url "projects:chats" project_id=3 %}"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Чаты</a>
+                                </div>
+                                <div class="col-auto"><a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">В
+                                        архив</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr class="table-success border border-success">
+                        <td>4</td>
+                        <td class="w-25">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div class="mb-1">бетон томас.</div>
+                                <span class="text-danger fw-bold">
+                                    Ошибка: не удалось запросить баланс. server error7833 private key invalid.
+                                    Обновите
+                                    приватный ключ
+                                </span>
+                            </div>
+                        </td>
+                        <td>vk ads</td>
+                        <td>fsdcsff@GMAIL.COM</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-around">
+                                <span class="col-md-auto mb-2 mb-lg-0">84353</span>
+                                <div class="col-md-auto">
+                                    <button class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
+                                        data-bs-placement="right" data-bs-title="Обновить баланс">
+                                        <span class="icon-refresh"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                        <td>10000</td>
+                        <td>
+                            <div class="row g-0 align-items-center justify-content-center">
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                                    <a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Изменить</a>
+                                </div>
+                                <div class="col-auto me-lg-2 mb-2 mb-lg-0"><a href="{% url "projects:chats" project_id=4 %}"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Чаты</a>
+                                </div>
+                                <div class="col-auto"><a href="#"
+                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">В
+                                        архив</a>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="col-auto ms-md-auto">
+            <button class="d-none d-md-inline-block btn btn-primary" data-bs-toggle="tooltip"
+                data-bs-placement="left" data-bs-title="Проекты в архиве"><span
+                    class="icon-archive"></span></button>
+            <button class="d-inline-block d-md-none btn btn-primary">Проекты в архиве</button>
+        </div>
+    </main>
+{% endblock %}

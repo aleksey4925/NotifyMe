@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+
+def signin(request):
+    context = {"title": "Войти"}
+
+    return render(request, "users/signin.html", context)
