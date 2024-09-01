@@ -1,14 +1,15 @@
-{% extends "main/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
     <main class="row g-0 gap-2 justify-content-center my-5 px-1">
         <div class="col-12 mb-4">
-            <form class="row g-0 justify-content-center justify-content-lg-end">
+            <form class="row g-0 justify-content-center justify-content-lg-end" action="{% url "projects:add_chat" project_id=project_id %}" method="post">
+                {% csrf_token %}
                 <div class="col-6 col-sm-auto ms-lg-auto">
-                    <input type="number" class="form-control rounded-end-0" placeholder="ID">
+                    <input type="number" class="form-control rounded-end-0" placeholder="ID" name="chat_id">
                 </div>
                 <div class="col-6 col-sm-auto me-sm-2 mb-2 mb-md-0">
-                    <input type="text" class="form-control rounded-start-0" placeholder="Комментарий">
+                    <input type="text" class="form-control rounded-start-0" placeholder="Комментарий" name="comment">
                 </div>
                 <div class="col-sm-auto btn-group" role="group">
                     <button type="submit" class="btn btn-outline-primary fw-bold">Тест</button>
@@ -25,85 +26,44 @@
                         <th class="bg-success text-white w-50">Комментарий</th>
                         <th class="bg-success text-white">Действия</th>
                     </tr>
-                    <tr>
-                        <td class="">1</td>
-                        <td>
-                            <a href="#"
-                                class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">-432432432</a>
-                        </td>
-                        <td class="w-50">
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <div class="mb-1">Основной</div>
-                                <span class="text-danger fw-bold"></span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row g-0 align-items-center justify-content-center">
-                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                    {% if chats|length != 0 %}
+                        {% for chat in chats %}
+                            <tr class="{% if forloop.counter|divisibleby:2 == True %}table-success border border-success{% endif %}">
+                                <td class="">{{ forloop.counter }}</td>
+                                <td>
                                     <a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
-                                        тестовое</a>
+                                        class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">{{ chat.chat_id }}</a>
+                                </td>
+                                <td class="w-50">
+                                    <div class="d-flex flex-column justify-content-center align-items-center">
+                                        <div class="mb-1">{{ chat.comment }}</div>
+                                        <span class="text-danger fw-bold">{{ chat.send_comment_error_text }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row g-0 align-items-center justify-content-center">
+                                        <div class="col-auto me-lg-2 mb-2 mb-lg-0">
+                                            <a href="#"
+                                                class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
+                                                тестовое</a>
+                                        </div>
+                                        <div class="col-auto me-2 d-none d-lg-block">|</div>
+                                        <div class="col-auto"><a href="#"
+                                                class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Удалить</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="4">
+                                <div class="p-3">
+                                    Вы пока не добавили ниодного чата.
                                 </div>
-                                <div class="col-auto me-2 d-none d-lg-block">|</div>
-                                <div class="col-auto"><a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Удалить</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr class="table-success border border-success">
-                        <td class="">2</td>
-                        <td>
-                            <a href="#"
-                                class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">4443423</a>
-                        </td>
-                        <td class="w-50">
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <div class="mb-1">Лично директору</div>
-                                <span class="text-danger fw-bold"></span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row g-0 align-items-center justify-content-center">
-                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
-                                    <a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
-                                        тестовое</a>
-                                </div>
-                                <div class="col-auto me-2 d-none d-lg-block">|</div>
-                                <div class="col-auto"><a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Удалить</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="">3</td>
-                        <td>
-                            <a href="#"
-                                class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">2134444</a>
-                        </td>
-                        <td class="w-50">
-                            <div class="d-flex flex-column justify-content-center align-items-center">
-                                <div class="mb-1">Лично контекстологу.</div>
-                                <span class="text-danger fw-bold">Ошибка 2874: не удалось отправить сообщение.
-                                    server 408 error permission denied.:</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="row g-0 align-items-center justify-content-center">
-                                <div class="col-auto me-lg-2 mb-2 mb-lg-0">
-                                    <a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
-                                        тестовое</a>
-                                </div>
-                                <div class="col-auto me-2 d-none d-lg-block">|</div>
-                                <div class="col-auto"><a href="#"
-                                        class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Удалить</a>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
+                    {% endif %}
                 </table>
             </div>
         </div>

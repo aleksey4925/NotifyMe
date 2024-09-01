@@ -1,17 +1,18 @@
-{% extends "main/base.html" %}
+{% extends "base.html" %}
 
 {% block content %}
     <main class="row g-0 justify-content-center my-auto">
-        <div class="px-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
+        <div class="px-3 py-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
             <div class="p-3 border border-3 border-success rounded-4 bg-success-subtle">
-                <form class="row g-0">
+                <form class="row g-0" action="{% url "users:signin" %}" method="post">
+                    {% csrf_token %}
                     <div class="mb-2">
-                        <label for="login" class="form-label">Логин</label>
-                        <input type="text" id="login" class="form-control" placeholder="johndoe">
+                        <label for="id_username" class="form-label">Логин</label>
+                        <input type="text" id="id_username" class="form-control" placeholder="Введите логин" name="username" value="{% if form.username.value %}{{ form.username.value }}{% endif %}"  required>
                     </div>
                     <div class="mb-5">
-                        <label for="password" class="form-label">Пароль</label>
-                        <input type="password" id="password" class="form-control" placeholder="********">
+                        <label for="id_password" class="form-label">Пароль</label>
+                        <input type="password" id="id_password" class="form-control" placeholder="Введите пароль" name="password" required>
                     </div>
                     <div class="text-center text-sm-start">
                         <button type="submit" class="btn btn-primary px-5 fw-bold">Войти</button>
