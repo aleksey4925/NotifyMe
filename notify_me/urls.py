@@ -19,8 +19,9 @@ from django.contrib import admin
 from django.urls import include, path
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("randomcharacterstring/", admin.site.urls),
     path("", include("main.urls", namespace="main")),
     path("projects/", include("projects.urls", namespace="projects")),
     path("users/", include("users.urls", namespace="users")),
+    path("oauth/", include("oauth.urls", namespace="oauth")),
 ]

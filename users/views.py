@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.shortcuts import redirect, render
 
@@ -15,7 +16,11 @@ def signin(request):
             if user:
                 auth.login(request, user)
 
-                return redirect("projects:index")
+                next_url = request.POST.get("next", None)
+                if next_url:
+                    return redirect(next_url)
+
+                return redirect("main:index")
     else:
         form = SigninForm()
 
@@ -24,5 +29,10 @@ def signin(request):
     return render(request, "users/signin.html", context)
 
 
+@login_required
 def signout(request):
+    request.session.pop("yandex_access_token", None)
+
+    auth.logout(request)
+
     return redirect("users:signin")

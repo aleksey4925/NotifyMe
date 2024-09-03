@@ -4,15 +4,28 @@
     <main class="row g-0 justify-content-center my-auto">
         <div class="px-3 py-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
             <div class="p-3 border border-3 border-success rounded-4 bg-success-subtle">
-                <form class="row g-0" action="{% url "users:signin" %}" method="post">
+                <form class="row g-0 needs-validation" action="{% url "users:signin" %}" method="post" novalidate>
                     {% csrf_token %}
+                    {% if request.GET.next %}
+                        <input type="hidden" name="next" value={{ request.GET.next }}>
+                    {% endif %}
                     <div class="mb-2">
-                        <label for="id_username" class="form-label">Логин</label>
-                        <input type="text" id="id_username" class="form-control" placeholder="Введите логин" name="username" value="{% if form.username.value %}{{ form.username.value }}{% endif %}"  required>
+                        <label for="id_username" class="form-label">Имя пользователя</label>
+                        <input type="text" id="id_username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" placeholder="Введите имя пользователя" name="username" value="{{ form.username.value|default_if_none:'' }}" required>
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.username.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="mb-5">
                         <label for="id_password" class="form-label">Пароль</label>
-                        <input type="password" id="id_password" class="form-control" placeholder="Введите пароль" name="password" required>
+                        <input type="password" id="id_password" class="form-control {% if form.password.errors %}is-invalid{% endif %}" placeholder="Введите пароль" name="password" required>
+                        {% if form.password.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.password.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="text-center text-sm-start">
                         <button type="submit" class="btn btn-primary px-5 fw-bold">Войти</button>

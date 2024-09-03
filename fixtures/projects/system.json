@@ -1,0 +1,34 @@
+[
+    {
+        "model": "projects.system",
+        "pk": 1,
+        "fields": {
+            "name": "Яндекс.Директ",
+            "provider": "yandex"
+        }
+    },
+    {
+        "model": "projects.system",
+        "pk": 2,
+        "fields": {
+            "name": "Google Ads",
+            "provider": "google"
+        }
+    },
+    {
+        "model": "projects.system",
+        "pk": 3,
+        "fields": {
+            "name": "Vk Ads",
+            "provider": "vk"
+        }
+    },
+    {
+        "model": "projects.system",
+        "pk": 4,
+        "fields": {
+            "name": "Telegram Ads",
+            "provider": "telegram"
+        }
+    }
+]

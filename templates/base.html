@@ -28,44 +28,49 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url "main:about" %}">О приложении</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url "projects:index" %}">Проекты</a>
-                            </li>
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url "projects:index" %}">Проекты</a>
+                                </li>
+                            {% endif %}
+                            {% if user.is_admin or user.is_staff %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{% url "admin:index" %}">Панель управления</a>
+                                </li>
+                            {% endif %}
+                            {% if not user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link d-block d-sm-none" href="{% url "users:signin" %}">Вход</a>
+                                </li>
+                            {% endif %}
+                            {% if user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link d-block d-sm-none" href="{% url "users:signout" %}">Выход</a>
+                                </li>
+                            {% endif %}
                         </ul>
-                        <div id="signin">
-                            <div class="d-none d-sm-flex">
-                                <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
-                                    href="{% url "users:signin" %}" data-bs-toggle="tooltip" data-bs-placement="left"
-                                    data-bs-title="Вход">
-                                    <div class="icon-enter fs-3"></div>
-                                </a>
-                            </div>
-                            <div class="d-block d-sm-none">
-                                <div class="text-center py-2">
-                                    <a href="{% url "users:signin" %}"
-                                        class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-medium">
-                                        Вход
+                        {% if not user.is_authenticated %}
+                            <div id="signin">
+                                <div class="d-none d-sm-flex">
+                                    <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
+                                        href="{% url "users:signin" %}" data-bs-toggle="tooltip" data-bs-placement="left"
+                                        data-bs-title="Вход">
+                                        <div class="icon-enter fs-3"></div>
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                        <div id="signout" class="d-none">
-                            <div class="d-none d-sm-flex">
-                                <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
-                                    href="{% url "users:signout" %}" data-bs-toggle="tooltip" data-bs-placement="left"
-                                    data-bs-title="Выход">
-                                    <div class="icon-exit fs-3"></div>
-                                </a>
-                            </div>
-                            <div class="d-block d-sm-none">
-                                <div class="text-center py-2">
-                                    <a href="{% url "users:signout" %}"
-                                        class="link-secondary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover fw-medium">
-                                        Выход
+                        {% endif %}
+                        {% if user.is_authenticated %}
+                            <div id="signout">
+                                <div class="d-none d-sm-flex">
+                                    <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
+                                        href="{% url "users:signout" %}" data-bs-toggle="tooltip" data-bs-placement="left"
+                                        data-bs-title="Выход">
+                                        <div class="icon-exit fs-3"></div>
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </nav>

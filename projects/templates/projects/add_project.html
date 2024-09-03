@@ -4,29 +4,48 @@
     <main class="row g-0 justify-content-center my-auto">
         <div class="px-3 py-3 px-sm-0 col-sm-8 col-lg-6 col-xl-4">
             <div class="p-3 border border-3 border-success rounded-4 bg-success-subtle">
-                <form class="row g-0" action="{% url "projects:add_project" %}" method="post">
+                <form class="row g-0 needs-validation" action="{% url "projects:add_project" %}" method="post" novalidate>
                     {% csrf_token %}
                     <div class="mb-2">
-                        <label for="project_name" class="form-label">Название проекта</label>
-                        <input type="text" id="project_name" class="form-control" placeholder="стройтепло" name="name">
+                        <label for="id_name" class="form-label">Название проекта</label>
+                        <input type="text" id="id_name" class="form-control {% if form.name.errors %}is-invalid{% endif %}" placeholder="Название проекта" name="name" value="{{ form.name.value|default_if_none:'' }}" required>
+                        {% if form.name.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.name.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="mb-2">
                         <label for="system" class="form-label">Система</label>
-                        <select id="system" class="form-select" name="system">
-                            <option selected>Выберите</option>
-                            <option value="яндекс.директ">яндекс.директ</option>
-                            <option value="гугл эдс">гугл эдс</option>
-                            <option value="яндекс директ">яндекс директ</option>
-                            <option value="vk ads">vk ads</option>
+                        <select id="system" class="form-select {% if form.system.errors %}is-invalid{% endif %}" name="system" required>
+                            <option value="" selected disabled hidden>Выберите систему</option>
+                            {% for system in form.fields.system.queryset %}
+                                <option value="{{ system.id }}" {% if system.id == form.system.value %}selected{% endif %}>{{ system.name }}</option>
+                            {% endfor %}
                         </select>
+                        {% if form.system.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.system.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="mb-2">
-                        <label for="login" class="form-label">Логин</label>
-                        <input type="email" id="login" class="form-control" name="login">
+                        <label for="id_login" class="form-label">Логин</label>
+                        <input type="email" id="id_login" class="form-control {% if form.login.errors %}is-invalid{% endif %}" placeholder="Емэйл в системе" name="login" value="{{ form.login.value|default_if_none:'' }}" required>
+                        {% if form.login.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.login.errors|striptags }}
+                            </div>
+                        {% endif %}            
                     </div>
                     <div class="mb-5">
                         <label for="threshold" class="form-label">Порог</label>
-                        <input type="number" id="threshold" class="form-control" name="threshold">
+                        <input type="number" id="threshold" class="form-control {% if form.threshold.errors %}is-invalid{% endif %}" placeholder="Пороговое значение" name="threshold" value="{{ form.threshold.value|default_if_none:'' }}" required>
+                        {% if form.threshold.errors %}
+                            <div class="invalid-feedback">
+                                {{ form.threshold.errors|striptags }}
+                            </div>
+                        {% endif %}
                     </div>
                     <div class="text-center text-sm-start">
                         <button type="submit" class="btn btn-primary px-5 fw-bold">Далее</button>

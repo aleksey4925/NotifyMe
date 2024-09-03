@@ -3,15 +3,25 @@
 {% block content %}
     <main class="row g-0 gap-2 justify-content-center my-5 px-1">
         <div class="col-12 mb-4">
-            <form class="row g-0 justify-content-center justify-content-lg-end" action="{% url "projects:add_chat" project_id=project_id %}" method="post">
+            <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url "projects:add_chat" project_id=project_id %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="col-6 col-sm-auto ms-lg-auto">
-                    <input type="number" class="form-control rounded-end-0" placeholder="ID" name="chat_id">
+                    <input type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{{ form.chat_id.value|default_if_none:'' }}" required>
+                    {% if form.chat_id.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.chat_id.errors|striptags }}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="col-6 col-sm-auto me-sm-2 mb-2 mb-md-0">
-                    <input type="text" class="form-control rounded-start-0" placeholder="Комментарий" name="comment">
+                    <input type="text" class="form-control rounded-start-0 {% if form.comment.errors %}is-invalid{% endif %}" placeholder="Комментарий" name="comment" value="{{ form.comment.value|default_if_none:'' }}" required>
+                    {% if form.comment.errors %}
+                        <div class="invalid-feedback">
+                            {{ form.comment.errors|striptags }}
+                        </div>
+                    {% endif %}
                 </div>
-                <div class="col-sm-auto btn-group" role="group">
+                <div class="col-sm-auto btn-group align-self-start" role="group">
                     <button type="submit" class="btn btn-outline-primary fw-bold">Тест</button>
                     <button type="submit" class="btn btn-primary fw-bold">Добавить</button>
                 </div>
