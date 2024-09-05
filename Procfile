@@ -1,1 +1,1 @@
-web: gunicorn NotifyMe.wsgi
+web: gunicorn notify_me.wsgi
