@@ -14,6 +14,7 @@ PROVIDERS = {
     },
 }
 
+
 @login_required
 def oauth_login(request, provider):
     provider_config = PROVIDERS.get(provider)
@@ -22,9 +23,10 @@ def oauth_login(request, provider):
 
     client_id = provider_config["client_id"]
 
-    authorization_url = f"{provider_config["authorization_url"]}?response_type=code&client_id={client_id}"
+    authorization_url = f"{provider_config['authorization_url']}?response_type=code&client_id={client_id}"
 
     return redirect(authorization_url)
+
 
 @login_required
 def oauth_callback(request, provider):
@@ -48,7 +50,7 @@ def oauth_callback(request, provider):
     if response_data.status_code == 200:
         save_or_update_oauth_token(request, provider, response_data)
 
-        next_url = request.session.pop('next_url', None)
+        next_url = request.session.pop("next_url", None)
         if next_url:
             return redirect(next_url)
 
