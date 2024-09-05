@@ -21,10 +21,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-!4bwuhi+47@pns0y$qka9ziu9ppe#p^fo%zp9t=!%e_r^^e&sm"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
@@ -133,7 +133,9 @@ AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = "/users/signin/"
 
-YANDEX_DIRECT_DOMAIN = "api-sandbox.direct.yandex.com"
+YANDEX_DIRECT_DOMAIN = "api.direct.yandex.com"
 
 YANDEX_CLIENT_ID = os.getenv("YANDEX_CLIENT_ID")
 YANDEX_CLIENT_SECRET = os.getenv("YANDEX_CLIENT_SECRET")
+
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")

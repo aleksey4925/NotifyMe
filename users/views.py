@@ -31,8 +31,6 @@ def signin(request):
 
 @login_required
 def signout(request):
-    request.session.pop("yandex_access_token", None)
-
     auth.logout(request)
 
     return redirect("users:signin")

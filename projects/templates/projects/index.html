@@ -27,7 +27,7 @@
                                 <td class="w-25">
                                     <div class="d-flex flex-column justify-content-center align-items-center">
                                         <div class="mb-1">{{ project.name }}</div>
-                                        <span class="text-danger fw-bold">{{ project.balance_error_text }}</span>
+                                        <span class="text-danger fw-bold">{{ project.balance_error_texts }}</span>
                                     </div>
                                 </td>
                                 <td>{{ project.system.name }}</td>
@@ -43,10 +43,10 @@
                                             {% endif %}
                                         </span>
                                         <div class="col-xl-6 text-xl-center">
-                                            <button class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
+                                            <a href="{% url "projects:refresh_balance" project_id=project.id %}" class="btn btn-primary rounded-circle p-auto" data-bs-toggle="tooltip"
                                                 data-bs-placement="right" data-bs-title="Обновить баланс">
                                                 <span class="icon-refresh"></span>
-                                            </button>
+                                            </a>
                                         </div>
                                     </div>
                                 </td>

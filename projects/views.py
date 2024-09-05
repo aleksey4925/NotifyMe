@@ -1,10 +1,11 @@
+from decimal import Decimal
 from django.urls import reverse
 import requests
-from datetime import datetime, timedelta
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
+from oauth.utils import get_access_token
 from projects.models import Project, Chat
 from projects.forms import ProjectForm, ChatForm
 
@@ -13,9 +14,16 @@ from notify_me import settings
 
 @login_required
 def index(request):
-    # balance_error_text
-
     projects = Project.objects.filter(user_id=request.user.id)
+
+    for project in projects:
+        if project.balance:
+            project.balance = round(project.balance)
+
+    for project in projects:
+        error_text = request.session.pop(f"balance_error_text_{project.id}", None)
+        if error_text:
+            project.balance_error_texts = error_text
 
     context = {"title": "Проекты", "projects": projects}
 
@@ -30,7 +38,7 @@ def add_project(request):
             system = form.cleaned_data["system"]
             provider = system.provider
 
-            access_token = request.session.get(f"{provider}_access_token")
+            access_token = get_access_token(request.user, provider)
 
             if not access_token:
                 request.session["saved_form_data"] = request.POST
@@ -38,79 +46,16 @@ def add_project(request):
 
                 return redirect("oauth:oauth_login", provider=provider)
 
-            headers = {"Authorization": f"Bearer {access_token}"}
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
 
-            start_date = (datetime.now() + timedelta(days=1)).strftime("%Y-%m-%d")
-
-            data = {
-                "method": "add",
-                "params": {
-                    "Campaigns": [
-                        {
-                            "TimeZone": "Europe/Moscow",
-                            "Name": request.POST.get("name"),
-                            "StartDate": start_date,
-                            "DailyBudget": {"Amount": 300000000, "Mode": "STANDARD"},
-                            "TimeTargeting": {
-                                "Schedule": {
-                                    "Items": [
-                                        "1,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "2,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "3,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "4,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "5,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "6,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                        "7,0,0,0,0,0,50,50,50,100,100,100,100,100,100,100,150,150,150,150,150,150,0,0,0",
-                                    ]
-                                },
-                                "ConsiderWorkingWeekends": "NO",
-                                "HolidaysSchedule": {
-                                    "SuspendOnHolidays": "NO",
-                                    "BidPercent": 50,
-                                    "StartHour": 0,
-                                    "EndHour": 23,
-                                },
-                            },
-                            "TextCampaign": {
-                                "BiddingStrategy": {
-                                    "Search": {
-                                        "BiddingStrategyType": "HIGHEST_POSITION"
-                                    },
-                                    "Network": {"BiddingStrategyType": "SERVING_OFF"},
-                                },
-                                "Settings": [
-                                    {"Option": "ADD_TO_FAVORITES", "Value": "YES"}
-                                ],
-                            },
-                        }
-                    ]
-                },
-            }
-
-            response = requests.post(
-                f"https://{settings.YANDEX_DIRECT_DOMAIN}/json/v5/campaigns/",
-                headers=headers,
-                json=data,
-            )
-
-            if response.status_code == 200:
-                campaign = response.json()
-                campaign_id = campaign["result"]["AddResults"][0]["Id"]
-
-                project = form.save(commit=False)
-                project.user = request.user
-                project.campaign_id = campaign_id
-                project.save()
-
-                return redirect("projects:index")
-            else:
-                form.non_field_errors = f"{response.status_code}: {response.text}"
+            return redirect("projects:index")
     else:
         if "saved_form_data" in request.session:
-            initial_data = request.session.pop("saved_form_data")
-
             request.method = "POST"
-            request.POST = initial_data
+            request.POST = request.session.pop("saved_form_data")
+
             return add_project(request)
         else:
             form = ProjectForm()
@@ -118,6 +63,41 @@ def add_project(request):
     context = {"title": "Добавить проект", "form": form}
 
     return render(request, "projects/add_project.html", context)
+
+
+@login_required
+def refresh_balance(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+
+    access_token = get_access_token(request.user, project.system.provider)
+
+    if not access_token:
+        request.session["next_url"] = reverse("projects:index")
+
+        return redirect("oauth:oauth_login", provider=project.system.provider)
+
+    data = {
+        "method": "AccountManagement",
+        "param": {"Action": "Get", "Logins": [project.login]},
+        "token": access_token,
+    }
+
+    response_data = requests.post(
+        f"https://{settings.YANDEX_DIRECT_DOMAIN}/live/v4/json/",
+        json=data,
+    )
+
+    try:
+        amount = response_data.json()["data"]["Accounts"][0]["Amount"]
+
+        project.balance = Decimal(amount)
+        project.save()
+    except (IndexError, KeyError, ValueError) as e:
+        request.session[f"balance_error_text_{project_id}"] = (
+            f"Ошибка при разборе ответа: {repr(e)}"
+        )
+
+    return redirect("projects:index")
 
 
 @login_required

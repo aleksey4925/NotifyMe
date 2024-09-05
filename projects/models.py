@@ -17,10 +17,11 @@ class System(models.Model):
 
 
 class Project(models.Model):
-    campaign_id = models.BigIntegerField(verbose_name="Идентификатор кампании")
     name = models.CharField(max_length=255, verbose_name="Название")
     login = models.EmailField(verbose_name="Логин")
-    balance = models.BigIntegerField(null=True, blank=True, verbose_name="Баланс")
+    balance = models.DecimalField(
+        max_digits=12, decimal_places=6, null=True, blank=True, verbose_name="Баланс"
+    )
     threshold = models.BigIntegerField(verbose_name="Порог")
     user = models.ForeignKey(
         User,
