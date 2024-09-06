@@ -1,1 +1,0 @@
-web: gunicorn notify_me.wsgi
