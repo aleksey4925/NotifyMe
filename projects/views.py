@@ -37,11 +37,13 @@ def add_project(request):
         if form.is_valid():
             system = form.cleaned_data["system"]
             provider = system.provider
+            login = request.POST.get("login")
 
-            access_token = get_access_token(request.user, provider)
+            access_token = get_access_token(request.user, provider, login)
 
             if not access_token:
                 request.session["saved_form_data"] = request.POST
+                request.session["login"] = request.POST.get("login")
                 request.session["next_url"] = reverse("projects:add_project")
 
                 return redirect("oauth:oauth_login", provider=provider)
@@ -69,9 +71,10 @@ def add_project(request):
 def refresh_balance(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
-    access_token = get_access_token(request.user, project.system.provider)
+    access_token = get_access_token(request.user, project.system.provider, project.login)
 
     if not access_token:
+        request.session["login"] = project.login
         request.session["next_url"] = reverse("projects:index")
 
         return redirect("oauth:oauth_login", provider=project.system.provider)

@@ -6,8 +6,9 @@ from users.models import User
 
 
 class OAuthToken(models.Model):
-    access_token = models.CharField(max_length=255)
-    expires_at = models.DateTimeField()
+    access_token = models.CharField(max_length=255, verbose_name="Токен доступа")
+    login = models.EmailField(verbose_name="Логин")
+    expires_at = models.DateTimeField(verbose_name="Истекает в")
 
     system = models.ForeignKey(
         System,
@@ -28,7 +29,7 @@ class OAuthToken(models.Model):
         verbose_name_plural = "Токены доступа"
 
     def is_expired(self):
-        return self.expires_at <= timezone.now()
+        return self.expires_at < timezone.now()
 
     def __str__(self):
         return f"{self.system.provider} токен для {self.user.username}"

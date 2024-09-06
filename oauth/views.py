@@ -48,7 +48,9 @@ def oauth_callback(request, provider):
     response_data = requests.post(provider_config["token_url"], data=data)
 
     if response_data.status_code == 200:
-        save_or_update_oauth_token(request, provider, response_data)
+        login = request.session.pop("login", None)
+
+        save_or_update_oauth_token(request, provider, response_data, login)
 
         next_url = request.session.pop("next_url", None)
         if next_url:

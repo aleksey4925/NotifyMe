@@ -38,7 +38,7 @@ def check_balance_and_notify():
     for chat in chats:
         project = chat.project
         threshold = Decimal(project.threshold)
-        access_token = get_access_token(project.user, project.system.provider)
+        access_token = get_access_token(project.user, project.system.provider, project.login)
 
         if not access_token:
             print(f"Нет токена доступа для {project.login} в системе {project.system.name}")
