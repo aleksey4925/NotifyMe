@@ -81,7 +81,11 @@ def refresh_balance(request, project_id):
 
     data = {
         "method": "AccountManagement",
-        "param": {"Action": "Get", "Logins": [project.login]},
+        "param": {"Action": "Get", "SelectionCriteria": {
+            "Logins": [
+                project.login
+            ]
+        }},
         "token": access_token,
     }
 

@@ -21,7 +21,11 @@ def send_telegram_message(chat_id, message):
 def get_current_balance(login, access_token):
     data = {
         "method": "AccountManagement",
-        "param": {"Action": "Get", "Logins": [login]},
+        "param": {"Action": "Get", "SelectionCriteria": {
+            "Logins": [
+                login
+            ]
+        }},
         "token": access_token,
     }
 
@@ -56,8 +60,6 @@ def check_balance_and_notify():
                 send_telegram_message(chat.chat_id, message)
         except Exception as e:
             print(f"Ошибка запроса к DirectApi для проверки текущего баланса пользователя {project.login} в системе {project.system.name}")
-
-    print("Готово!")
 
 if __name__ == "__main__":
     check_balance_and_notify()

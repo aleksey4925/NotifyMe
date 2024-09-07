@@ -32,4 +32,4 @@ class OAuthToken(models.Model):
         return self.expires_at < timezone.now()
 
     def __str__(self):
-        return f"{self.system.provider} токен для {self.user.username}"
+        return f"Аккаунт {self.login} в системе {self.system.name} для пользователя {self.user.username}"
