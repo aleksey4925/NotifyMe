@@ -2,6 +2,7 @@
 
 {% block content %}
     <main class="row g-0 gap-2 justify-content-center my-5 px-1">
+        <div class="text-center mb-4">Перед добавлением чата добавьте себе этого бота: <span class="text-primary fw-bold">t.me/ntf_m_bot</span></div>
         <div class="col-12 mb-4">
             <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url "projects:add_chat" project_id=project_id %}" method="post" novalidate>
                 {% csrf_token %}
