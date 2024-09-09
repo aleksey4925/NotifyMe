@@ -14,11 +14,7 @@ from notify_me import settings
 
 @login_required
 def index(request):
-    projects = Project.objects.filter(user_id=request.user.id)
-
-    for project in projects:
-        if project.balance:
-            project.balance = round(project.balance)
+    projects = Project.objects.filter(user=request.user)
 
     for project in projects:
         error_text = request.session.pop(f"balance_error_text_{project.id}", None)
@@ -37,30 +33,17 @@ def add_project(request):
         if form.is_valid():
             system = form.cleaned_data["system"]
             provider = system.provider
-            login = request.POST.get("login")
-
-            access_token = get_access_token(request.user, provider, login)
-
-            if not access_token:
-                request.session["saved_form_data"] = request.POST
-                request.session["login"] = request.POST.get("login")
-                request.session["next_url"] = reverse("projects:add_project")
-
-                return redirect("oauth:oauth_login", provider=provider)
 
             project = form.save(commit=False)
             project.user = request.user
             project.save()
 
-            return redirect("projects:index")
-    else:
-        if "saved_form_data" in request.session:
-            request.method = "POST"
-            request.POST = request.session.pop("saved_form_data")
+            request.session["project_id"] = project.id
+            request.session["next_url"] = reverse("projects:index")
 
-            return add_project(request)
-        else:
-            form = ProjectForm()
+            return redirect("oauth:oauth_login", provider=provider)
+    else:
+        form = ProjectForm()
 
     context = {"title": "Добавить проект", "form": form}
 
@@ -71,10 +54,10 @@ def add_project(request):
 def refresh_balance(request, project_id):
     project = get_object_or_404(Project, id=project_id)
 
-    access_token = get_access_token(request.user, project.system.provider, project.login)
+    access_token = get_access_token(request.user, project.system.provider, project)
 
     if not access_token:
-        request.session["login"] = project.login
+        request.session["project_id"] = project.id
         request.session["next_url"] = reverse("projects:index")
 
         return redirect("oauth:oauth_login", provider=project.system.provider)
@@ -83,7 +66,7 @@ def refresh_balance(request, project_id):
         "method": "AccountManagement",
         "param": {"Action": "Get", "SelectionCriteria": {
             "Logins": [
-                project.login
+                project.login.split('@')[0]
             ]
         }},
         "token": access_token,
@@ -97,18 +80,24 @@ def refresh_balance(request, project_id):
     try:
         response_data = response_data.json()
 
-        if "data" in response_data and "Accounts" in response_data["data"] and response_data["data"]["Accounts"]:
-            amount = response_data["data"]["Accounts"][0].get("Amount")
+        if "data" in response_data:
+            if response_data["data"]["Accounts"]:
+                amount = response_data["data"]["Accounts"][0].get("Amount")
 
-            project.balance = Decimal(amount)
-            project.save()
+                project.balance = Decimal(amount)
+                project.save()
+            else:
+                error = response_data['data']['ActionsResult'][0]['Errors'][0]
+
+                request.session[f"balance_error_text_{project_id}"] = f"Data error: {error.get('FaultCode')}, {error.get('FaultString')}, {error.get('FaultDetail')}"
         else:
-            request.session[f"balance_error_text_{project_id}"] = f"Error code: {response_data.get('error_code')}, Error str: {response_data.get('error_str')}, Error detail: {response_data.get('error_detail')}"
+            request.session[f"balance_error_text_{project_id}"] = f"Structure error: {response_data.get('error_code')}, {response_data.get('error_str')}, {response_data.get('error_detail')}"
+
+        return redirect("projects:index")
     except Exception:
         request.session[f"balance_error_text_{project_id}"] = "Неизвестная ошибка"
 
-    return redirect("projects:index")
-
+        return redirect("projects:index")
 
 @login_required
 def chats(request, project_id):

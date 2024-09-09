@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
-from projects.models import System
+from projects.models import System, Project
 from users.models import User
 
 
@@ -22,6 +22,12 @@ class OAuthToken(models.Model):
         related_name="oauth_tokens",
         verbose_name="Айди пользователя",
     )
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="oauth_tokens",
+        verbose_name="Айди проекта",
+    )
 
     class Meta:
         db_table = "oauth_token"
@@ -32,4 +38,4 @@ class OAuthToken(models.Model):
         return self.expires_at < timezone.now()
 
     def __str__(self):
-        return f"Аккаунт {self.login} в системе {self.system.name} для пользователя {self.user.username}"
+        return f"Логин {self.login} в системе {self.system.name} для пользователя {self.user.username}"

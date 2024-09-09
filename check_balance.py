@@ -24,7 +24,7 @@ def get_current_balance(login, access_token):
         "method": "AccountManagement",
         "param": {"Action": "Get", "SelectionCriteria": {
             "Logins": [
-                login
+                login.split('@')[0]
             ]
         }},
         "token": access_token,
@@ -51,7 +51,7 @@ def check_balance_and_notify():
     for chat in chats:
         project = chat.project
         threshold = Decimal(project.threshold)
-        access_token = get_access_token(project.user, project.system.provider, project.login)
+        access_token = get_access_token(project.user, project.system.provider, project)
 
         if not access_token:
             print(f"Нет токена доступа для {project.login} в системе {project.system.name}")

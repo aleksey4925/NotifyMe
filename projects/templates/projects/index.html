@@ -34,10 +34,10 @@
                                 <td>{{ project.login }}</td>
                                 <td>
                                     <div class="row g-0 align-items-center justify-content-around">
-                                        <span class="col-xl-6 text-xl-center mb-2 mb-xl-0 
+                                        <span class="col-xl-6 text-xl-center mb-2 mb-xl-0
                                             {% if project.balance is not None and project.balance < project.threshold %}text-danger fs-5{% endif %}">
                                             {% if project.balance is not None %}
-                                                {{ project.balance }}
+                                                {{ project.balance|floatformat:0 }}
                                             {% else %}
                                                 &mdash;
                                             {% endif %}
