@@ -4,7 +4,7 @@
     <main class="row g-0 gap-2 justify-content-center my-5 px-1">
         <div class="text-center mb-4">Перед добавлением чата добавьте себе этого бота: <span class="text-primary fw-bold">t.me/ntf_m_bot</span></div>
         <div class="col-12 mb-4">
-            <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url "projects:add_chat" project_id=project_id %}" method="post" novalidate>
+            <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url 'projects:add_chat' project_id=project_id %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="col-6 col-sm-auto ms-lg-auto">
                     <input type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{{ form.chat_id.value|default_if_none:'' }}" required>
@@ -48,13 +48,13 @@
                                 <td class="w-50">
                                     <div class="d-flex flex-column justify-content-center align-items-center">
                                         <div class="mb-1">{{ chat.comment }}</div>
-                                        <span class="text-danger fw-bold">{{ chat.send_comment_error_text }}</span>
+                                        <span class="text-danger fw-bold">{{ chat.test_notification_error }}</span>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="row g-0 align-items-center justify-content-center">
                                         <div class="col-auto me-lg-2 mb-2 mb-lg-0">
-                                            <a href="#"
+                                            <a href="{% url 'projects:send_test_notification' project_id=project_id chat_id=chat.id %}"
                                                 class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
                                                 тестовое</a>
                                         </div>

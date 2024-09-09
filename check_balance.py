@@ -1,3 +1,4 @@
+from time import sleep
 from decimal import Decimal
 import requests
 import os
@@ -34,7 +35,15 @@ def get_current_balance(login, access_token):
         json=data,
     )
 
-    return response_data.json()["data"]["Accounts"][0]["Amount"]
+    try:
+        response_data = response_data.json()
+
+        if "data" in response_data and "Accounts" in response_data["data"] and response_data["data"]["Accounts"]:
+            return response_data["data"]["Accounts"][0].get("Amount")
+        else:
+            return None
+    except Exception:
+        return None
 
 def check_balance_and_notify():
     chats = Chat.objects.all()
@@ -48,9 +57,9 @@ def check_balance_and_notify():
             print(f"Нет токена доступа для {project.login} в системе {project.system.name}")
             continue
 
-        try:
-            current_balance = get_current_balance(project.login, access_token)
+        current_balance = get_current_balance(project.login, access_token)
 
+        if not current_balance == None:
             project.balance = Decimal(current_balance)
             project.save()
 
@@ -58,8 +67,10 @@ def check_balance_and_notify():
                 message = f"Внимание! Ваш баланс на аккаунте {project.login} в системе {project.system.name} опустился ниже порогового уровня. Пожалуйста, пополните баланс, чтобы избежать приостановки рекламных кампаний. Текущий баланс: {current_balance}."
 
                 send_telegram_message(chat.chat_id, message)
-        except Exception as e:
-            print(f"Ошибка запроса к DirectApi для проверки текущего баланса пользователя {project.login} в системе {project.system.name}")
+
+                sleep(5)
+        else:
+            print(f"Произошла непредвиденная ошибка при проверке баланса {project.login} в системе {project.system.name}")
 
 if __name__ == "__main__":
     check_balance_and_notify()

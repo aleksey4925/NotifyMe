@@ -95,25 +95,31 @@ def refresh_balance(request, project_id):
     )
 
     try:
-        amount = response_data.json()["data"]["Accounts"][0]["Amount"]
+        response_data = response_data.json()
 
-        project.balance = Decimal(amount)
-        project.save()
-    except (IndexError, KeyError, ValueError) as e:
-        request.session[f"balance_error_text_{project_id}"] = (
-            f"Ошибка при разборе ответа: {repr(e)}"
-        )
+        if "data" in response_data and "Accounts" in response_data["data"] and response_data["data"]["Accounts"]:
+            amount = response_data["data"]["Accounts"][0].get("Amount")
+
+            project.balance = Decimal(amount)
+            project.save()
+        else:
+            request.session[f"balance_error_text_{project_id}"] = f"Error code: {response_data.get('error_code')}, Error str: {response_data.get('error_str')}, Error detail: {response_data.get('error_detail')}"
+    except Exception:
+        request.session[f"balance_error_text_{project_id}"] = "Неизвестная ошибка"
 
     return redirect("projects:index")
 
 
 @login_required
 def chats(request, project_id):
-    # send_comment_error_text
-
     project = get_object_or_404(Project, id=project_id, user_id=request.user.id)
 
     chats = project.chats.all()
+
+    for chat in chats:
+        error_text = request.session.pop(f"test_notification_error_{chat.id}", None)
+        if error_text:
+            chat.test_notification_error = error_text
 
     context = {
         "title": "Список чатов проекта",
@@ -146,3 +152,26 @@ def add_chat(request, project_id):
         }
 
         return render(request, "projects/chats.html", context)
+
+@login_required
+def send_test_notification(request, project_id, chat_id):
+    project = get_object_or_404(Project, id=project_id, user=request.user)
+
+    chat = get_object_or_404(Chat, id=chat_id, project=project)
+
+    message = "Тестовое уведомление"
+
+    try:
+        response_data = requests.get(f"https://api.telegram.org/bot{settings.TELEGRAM_TOKEN}/sendMessage?chat_id={chat.chat_id}&text={message}")
+
+        if not response_data.status_code == 200:
+            response_data = response_data.json()
+
+            request.session[f"test_notification_error_{chat_id}"] = (
+                f"Error code: {response_data['error_code']}, Description: {response_data['description']}"
+            )
+
+        return redirect("projects:chats", project_id=project_id)
+    except Exception:
+        return "Непредвиденная ошибка при отправке тестового уведомления"
+
