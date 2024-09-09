@@ -7,9 +7,9 @@
             <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url 'projects:add_chat' project_id=project_id %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="col-6 col-sm-auto ms-lg-auto">
-                    <input type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{{ form.chat_id.value|default_if_none:'' }}" required>
+                    <input id="chat_id" type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{{ form.chat_id.value|default_if_none:'' }}" required>
                     {% if form.chat_id.errors %}
-                        <div class="invalid-feedback">
+                        <div id="invalid_chat_id_feedback" class="invalid-feedback">
                             {{ form.chat_id.errors|striptags }}
                         </div>
                     {% endif %}
@@ -23,7 +23,7 @@
                     {% endif %}
                 </div>
                 <div class="col-sm-auto btn-group align-self-start" role="group">
-                    <button type="submit" class="btn btn-outline-primary fw-bold">Тест</button>
+                    <a id="test-btn" href="{% url 'projects:send_test_notification' project_id=project_id %}" class="btn btn-outline-primary fw-bold">Тест</a>
                     <button type="submit" class="btn btn-primary fw-bold">Добавить</button>
                 </div>
             </form>
@@ -42,7 +42,7 @@
                             <tr class="{% if forloop.counter|divisibleby:2 == True %}table-success border border-success{% endif %}">
                                 <td class="">{{ forloop.counter }}</td>
                                 <td>
-                                    <a href="#"
+                                    <a href="tg://resolve?domain={{ chat.chat_id }}"
                                         class="link-primary link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">{{ chat.chat_id }}</a>
                                 </td>
                                 <td class="w-50">
@@ -54,12 +54,12 @@
                                 <td>
                                     <div class="row g-0 align-items-center justify-content-center">
                                         <div class="col-auto me-lg-2 mb-2 mb-lg-0">
-                                            <a href="{% url 'projects:send_test_notification' project_id=project_id chat_id=chat.id %}"
+                                            <a href="{% url 'projects:send_test_notification' project_id=project_id %}?chat_id={{ chat.chat_id }}"
                                                 class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Отправить
                                                 тестовое</a>
                                         </div>
                                         <div class="col-auto me-2 d-none d-lg-block">|</div>
-                                        <div class="col-auto"><a href="#"
+                                        <div class="col-auto"><a href="{% url 'projects:delete_chat' project_id=project_id chat_id=chat.id %}"
                                                 class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">Удалить</a>
                                         </div>
                                     </div>
@@ -79,4 +79,33 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.getElementById('test-btn').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const chatIdInput = document.getElementById('chat_id');
+
+            if(chatIdInput.value) {
+                const currentHref = this.href;
+
+                this.href = currentHref + "?chat_id=" + encodeURIComponent(chatIdInput.value);
+
+                window.location.href = this.href;
+            } else {
+                chatIdInput.classList.add('is-invalid');
+
+                let feedbackElement = document.getElementById('invalid_chat_id_feedback');
+                if (!feedbackElement) {
+                    feedbackElement = document.createElement('div');
+                    feedbackElement.id = 'invalid_chat_id_feedback';
+                    feedbackElement.classList.add('invalid-feedback');
+                    chatIdInput.parentNode.appendChild(feedbackElement);
+                }
+
+                feedbackElement.textContent = 'Обязательное поле.';
+                feedbackElement.style.display = 'block';
+            }
+        });
+    </script>
 {% endblock %}

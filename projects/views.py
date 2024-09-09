@@ -117,7 +117,7 @@ def chats(request, project_id):
     chats = project.chats.all()
 
     for chat in chats:
-        error_text = request.session.pop(f"test_notification_error_{chat.id}", None)
+        error_text = request.session.pop(f"test_notification_error_{chat.chat_id}", None)
         if error_text:
             chat.test_notification_error = error_text
 
@@ -154,24 +154,40 @@ def add_chat(request, project_id):
         return render(request, "projects/chats.html", context)
 
 @login_required
-def send_test_notification(request, project_id, chat_id):
-    project = get_object_or_404(Project, id=project_id, user=request.user)
+def send_test_notification(request, project_id):
+    chat_id = request.GET.get('chat_id')
 
-    chat = get_object_or_404(Chat, id=chat_id, project=project)
+    project = Project.objects.get(id=project_id, user=request.user)
 
-    message = "Тестовое уведомление"
+    if project:
+        message = "Тестовое уведомление"
 
-    try:
-        response_data = requests.get(f"https://api.telegram.org/bot{settings.TELEGRAM_TOKEN}/sendMessage?chat_id={chat.chat_id}&text={message}")
+        try:
+            response_data = requests.get(f"https://api.telegram.org/bot{settings.TELEGRAM_TOKEN}/sendMessage?chat_id={chat_id}&text={message}")
 
-        if not response_data.status_code == 200:
-            response_data = response_data.json()
+            if not response_data.status_code == 200:
+                response_data = response_data.json()
 
-            request.session[f"test_notification_error_{chat_id}"] = (
-                f"Error code: {response_data['error_code']}, Description: {response_data['description']}"
-            )
+                request.session[f"test_notification_error_{chat_id}"] = (
+                    f"Error code: {response_data['error_code']}, Description: {response_data['description']}"
+                )
+
+            return redirect("projects:chats", project_id=project_id)
+        except Exception:
+            request.session[f"test_notification_error_{chat_id}"] = "Непредвиденная ошибка при отправке тестового уведомления"
+
+            return redirect("projects:chats", project_id=project_id)
+    else:
+        return redirect("main:index")
+
+@login_required
+def delete_chat(request, project_id, chat_id):
+    project = Project.objects.get(id=project_id, user=request.user)
+
+    if project:
+        chat = Chat.objects.get(id=chat_id, project=project)
+        chat.delete()
 
         return redirect("projects:chats", project_id=project_id)
-    except Exception:
-        return "Непредвиденная ошибка при отправке тестового уведомления"
-
+    else:
+        return redirect("main:index")
