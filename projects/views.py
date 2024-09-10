@@ -207,8 +207,8 @@ def send_test_notification(request, project_id):
                         f"{response_data['error_code']} {response_data['description']}"
                     )
                     chat.save()
-                except Chat.DoesNotExist:
-                    request.session[f"test_notification_error_{chat_id}"] = f"{response_data['error_code']} {response_data['description']}"
+                except Chat.DoesNotExist as e:
+                    request.session[f"test_notification_error_{chat_id}"] = f"Ошибка: {str(e)}"
 
         return redirect("projects:chats", project_id=project_id)
     except Exception as e:
