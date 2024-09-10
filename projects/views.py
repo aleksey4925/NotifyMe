@@ -89,9 +89,9 @@ def refresh_balance(request, project_id):
             else:
                 error = response_data['data']['ActionsResult'][0]['Errors'][0]
 
-                request.session[f"balance_error_text_{project_id}"] = f"Data error: {error.get('FaultCode')}, {error.get('FaultString')}, {error.get('FaultDetail')}"
+                request.session[f"balance_error_text_{project_id}"] = f"Data error: {error.get('FaultCode')} {error.get('FaultString')} {error.get('FaultDetail')}"
         else:
-            request.session[f"balance_error_text_{project_id}"] = f"Structure error: {response_data.get('error_code')}, {response_data.get('error_str')}, {response_data.get('error_detail')}"
+            request.session[f"balance_error_text_{project_id}"] = f"Structure error: {response_data.get('error_code')} {response_data.get('error_str')} {response_data.get('error_detail')}"
 
         return redirect("projects:index")
     except Exception:

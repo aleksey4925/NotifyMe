@@ -63,7 +63,7 @@ def check_balance_and_notify():
             project.balance = Decimal(current_balance)
             project.save()
 
-            if current_balance < threshold:
+            if project.balance < threshold:
                 message = f"Внимание! Ваш баланс на аккаунте {project.login} в системе {project.system.name} опустился ниже порогового уровня. Пожалуйста, пополните баланс, чтобы избежать приостановки рекламных кампаний. Текущий баланс: {current_balance}."
 
                 send_telegram_message(chat.chat_id, message)

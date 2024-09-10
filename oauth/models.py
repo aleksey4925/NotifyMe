@@ -38,4 +38,4 @@ class OAuthToken(models.Model):
         return self.expires_at < timezone.now()
 
     def __str__(self):
-        return f"Логин {self.login} в системе {self.system.name} для пользователя {self.user.username}"
+        return f"Логин {self.project.login} в системе {self.system.name} для пользователя {self.user.username}"

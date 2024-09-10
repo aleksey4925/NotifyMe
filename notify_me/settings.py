@@ -135,7 +135,7 @@ AUTH_USER_MODEL = "users.User"
 
 LOGIN_URL = "/users/signin/"
 
-YANDEX_DIRECT_DOMAIN = "api.direct.yandex.com"
+YANDEX_DIRECT_DOMAIN = "api.direct.yandex.ru"
 
 YANDEX_CLIENT_ID = os.getenv("YANDEX_CLIENT_ID")
 YANDEX_CLIENT_SECRET = os.getenv("YANDEX_CLIENT_SECRET")
