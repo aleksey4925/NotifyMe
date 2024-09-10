@@ -8,6 +8,11 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("add_project/", views.add_project, name="add_project"),
     path(
+        "<int:project_id>/edit_project_balance/",
+        views.edit_project_balance,
+        name="edit_project_balance",
+    ),
+    path(
         "<int:project_id>/refresh_balance/",
         views.refresh_balance,
         name="refresh_balance",
@@ -19,5 +24,9 @@ urlpatterns = [
         views.send_test_notification,
         name="send_test_notification",
     ),
-    path("<int:project_id>/chats/<int:chat_id>/delete_chat/", views.delete_chat, name="delete_chat"),
+    path(
+        "<int:project_id>/chats/<int:chat_id>/delete_chat/",
+        views.delete_chat,
+        name="delete_chat",
+    ),
 ]

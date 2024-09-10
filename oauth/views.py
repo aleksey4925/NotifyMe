@@ -52,11 +52,9 @@ def oauth_callback(request, provider):
 
         save_or_update_oauth_token(request, provider, response_data, project_id)
 
-        next_url = request.session.pop("next_url", None)
-        if next_url:
-            return redirect(next_url)
+        next_url = request.session.pop("next_url")
 
-        return redirect("main:index")
+        return redirect(next_url)
     else:
         return render(
             request, "oauth/error.html", {"error": "Failed to obtain access token."}

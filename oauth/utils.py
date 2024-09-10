@@ -25,11 +25,11 @@ def save_or_update_oauth_token(request, provider, response_data, project_id):
     return oauth_token
 
 
-def get_access_token(user, provider, project):
-    system = System.objects.get(provider=provider)
-
+def get_access_token(user, project):
     try:
-        token = OAuthToken.objects.get(user=user, system=system, project=project)
+        token = OAuthToken.objects.get(
+            user=user, system=project.system, project=project
+        )
         if token.is_expired():
             return None
         return token.access_token

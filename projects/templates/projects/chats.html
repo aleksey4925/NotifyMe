@@ -7,12 +7,13 @@
             <form class="row g-0 justify-content-center justify-content-lg-end needs-validation" action="{% url 'projects:add_chat' project_id=project_id %}" method="post" novalidate>
                 {% csrf_token %}
                 <div class="col-6 col-sm-auto ms-lg-auto">
-                    <input id="chat_id" type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{{ form.chat_id.value|default_if_none:'' }}" required>
+                    <input id="chat_id" type="number" class="form-control rounded-end-0 {% if form.chat_id.errors %}is-invalid{% endif %}" placeholder="ID" name="chat_id" value="{% if form %}{{ form.chat_id.value|default_if_none:'' }}{% else %}{{ test_chat_id|default_if_none:'' }}{% endif %}" required>
                     {% if form.chat_id.errors %}
                         <div id="invalid_chat_id_feedback" class="invalid-feedback">
                             {{ form.chat_id.errors|striptags }}
                         </div>
                     {% endif %}
+                    <span class="text-danger fw-bold">{{ test_notification_error }}</span>
                 </div>
                 <div class="col-6 col-sm-auto me-sm-2 mb-2 mb-md-0">
                     <input type="text" class="form-control rounded-start-0 {% if form.comment.errors %}is-invalid{% endif %}" placeholder="Комментарий" name="comment" value="{{ form.comment.value|default_if_none:'' }}" required>
@@ -23,7 +24,7 @@
                     {% endif %}
                 </div>
                 <div class="col-sm-auto btn-group align-self-start" role="group">
-                    <a id="test-btn" href="{% url 'projects:send_test_notification' project_id=project_id %}" class="btn btn-outline-primary fw-bold">Тест</a>
+                    <a id="test-btn" href="{% url 'projects:send_test_notification' project_id=project_id %}?is_new=1" class="btn btn-outline-primary fw-bold">Тест</a>
                     <button type="submit" class="btn btn-primary fw-bold">Добавить</button>
                 </div>
             </form>
@@ -89,7 +90,7 @@
             if(chatIdInput.value) {
                 const currentHref = this.href;
 
-                this.href = currentHref + "?chat_id=" + encodeURIComponent(chatIdInput.value);
+                this.href = currentHref + "&chat_id=" + encodeURIComponent(chatIdInput.value);
 
                 window.location.href = this.href;
             } else {

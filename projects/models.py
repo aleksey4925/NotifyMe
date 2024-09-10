@@ -27,14 +27,15 @@ class Project(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="projects",
-        verbose_name="Айди пользователя",
+        verbose_name="Пользователь",
     )
     system = models.ForeignKey(
         System,
         on_delete=models.CASCADE,
         related_name="projects",
-        verbose_name="Айди системы",
+        verbose_name="Система",
     )
+    balance_error = models.CharField(max_length=500, verbose_name="Ошибка баланса")
 
     class Meta:
         db_table = "project"
@@ -53,6 +54,9 @@ class Chat(models.Model):
         on_delete=models.CASCADE,
         related_name="chats",
         verbose_name="Айди проекта",
+    )
+    test_notification_error = models.CharField(
+        max_length=500, verbose_name="Ошибка тестового уведомления"
     )
 
     class Meta:

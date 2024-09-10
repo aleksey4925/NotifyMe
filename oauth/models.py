@@ -7,7 +7,6 @@ from users.models import User
 
 class OAuthToken(models.Model):
     access_token = models.CharField(max_length=255, verbose_name="Токен доступа")
-    login = models.EmailField(verbose_name="Логин")
     expires_at = models.DateTimeField(verbose_name="Истекает в")
 
     system = models.ForeignKey(
