@@ -53,7 +53,7 @@ def edit_project_balance(request, project_id):
     access_token = get_access_token(request.user, project)
 
     if not access_token:
-        project.balance_error = f"Токен доступа для {project.login} в системе {project.system.name} не найден"
+        project.balance_error = "Нет токена доступа для данного проекта"
         project.save()
 
         return redirect("projects:index")
@@ -92,9 +92,7 @@ def refresh_balance(request, project_id):
     access_token = get_access_token(request.user, project)
 
     if not access_token:
-        project.balance_error = (
-            f"Нет токена доступа для {project.login} в системе {project.system.name}"
-        )
+        project.balance_error = "Нет токена доступа для данного проекта"
         project.save()
 
         return redirect("projects:index")

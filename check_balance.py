@@ -25,7 +25,7 @@ def check_balance_and_notify():
         access_token = get_access_token(project.user, project)
 
         if not access_token:
-            project.balance_error = f"Нет токена доступа для {project.login} в системе {project.system.name}"
+            project.balance_error = "Нет токена доступа для данного проекта"
             project.save()
 
             continue
@@ -42,7 +42,7 @@ def check_balance_and_notify():
                 project.save()
 
                 if project.balance < threshold:
-                    message = f"Внимание! Ваш баланс на аккаунте {project.login} в системе {project.system.name} опустился ниже порогового уровня. Пожалуйста, пополните баланс, чтобы избежать приостановки рекламных кампаний. Текущий баланс: {project.balance}."
+                    message = f"Внимание! Ваш баланс проекта {project.name} в системе {project.system.name} опустился ниже порогового уровня. Пожалуйста, пополните баланс, чтобы избежать приостановки рекламных кампаний. Текущий баланс: {project.balance}."
 
                     send_telegram_message(chat.chat_id, message)
 

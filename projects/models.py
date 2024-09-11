@@ -53,10 +53,10 @@ class Chat(models.Model):
         Project,
         on_delete=models.CASCADE,
         related_name="chats",
-        verbose_name="Айди проекта",
+        verbose_name="Проект",
     )
     test_notification_error = models.CharField(
-        max_length=500, verbose_name="Ошибка тестового уведомления"
+        max_length=500, verbose_name="Ошибка отправки уведомления"
     )
 
     class Meta:

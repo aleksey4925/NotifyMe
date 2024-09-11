@@ -13,19 +13,19 @@ class OAuthToken(models.Model):
         System,
         on_delete=models.CASCADE,
         related_name="oauth_tokens",
-        verbose_name="Айди системы",
+        verbose_name="Система",
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="oauth_tokens",
-        verbose_name="Айди пользователя",
+        verbose_name="Пользователь",
     )
     project = models.ForeignKey(
         Project,
         on_delete=models.CASCADE,
         related_name="oauth_tokens",
-        verbose_name="Айди проекта",
+        verbose_name="Проект",
     )
 
     class Meta:
@@ -37,4 +37,4 @@ class OAuthToken(models.Model):
         return self.expires_at < timezone.now()
 
     def __str__(self):
-        return f"Логин {self.project.login} в системе {self.system.name} для пользователя {self.user.username}"
+        return f"Токен доступа для проекта {self.project.name} в системе {self.system.name} для пользователя {self.user.username}"
