@@ -2,12 +2,11 @@ import requests
 from notify_me import settings
 
 
-def get_current_balance(login, access_token):
+def get_current_balance(access_token):
     data = {
         "method": "AccountManagement",
         "param": {
-            "Action": "Get",
-            "SelectionCriteria": {"Logins": [login.split("@")[0]]},
+            "Action": "Get"
         },
         "locale": "ru",
         "token": access_token,

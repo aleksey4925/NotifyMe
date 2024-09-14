@@ -30,7 +30,7 @@ def check_balance_and_notify():
 
             continue
 
-        response_data = get_current_balance(project.login, access_token)
+        response_data = get_current_balance(access_token)
 
         response_data = response_data.json()
 
@@ -39,6 +39,7 @@ def check_balance_and_notify():
                 amount = response_data["data"]["Accounts"][0].get("Amount")
 
                 project.balance = Decimal(amount)
+                project.balance_error = ""
                 project.save()
 
                 if project.balance < threshold:

@@ -58,7 +58,7 @@ def edit_project_balance(request, project_id):
 
         return redirect("projects:index")
 
-    response_data = get_current_balance(project.login, access_token)
+    response_data = get_current_balance(access_token)
 
     response_data = response_data.json()
 
@@ -67,6 +67,7 @@ def edit_project_balance(request, project_id):
             amount = response_data["data"]["Accounts"][0].get("Amount")
 
             project.balance = Decimal(amount)
+            project.balance_error = ""
             project.save()
 
             return redirect("projects:chats", project_id=project_id)
@@ -97,7 +98,7 @@ def refresh_balance(request, project_id):
 
         return redirect("projects:index")
 
-    response_data = get_current_balance(project.login, access_token)
+    response_data = get_current_balance(access_token)
 
     response_data = response_data.json()
 
@@ -106,6 +107,7 @@ def refresh_balance(request, project_id):
             amount = response_data["data"]["Accounts"][0].get("Amount")
 
             project.balance = Decimal(amount)
+            project.balance_error = ""
         else:
             error = response_data["data"]["ActionsResult"][0]["Errors"][0]
 
