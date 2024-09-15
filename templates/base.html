@@ -25,9 +25,6 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-lg-0 text-center fw-medium">
-                            <li class="nav-item">
-                                <a class="nav-link" href="{% url "main:about" %}">О приложении</a>
-                            </li>
                             {% if user.is_authenticated %}
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url "projects:index" %}">Проекты</a>
@@ -74,7 +71,7 @@
                     </div>
                 </div>
             </nav>
-    
+
             {% include "includes/notifications.html" %}
 
             {% block content %}{% endblock %}

@@ -227,4 +227,4 @@ def delete_chat(request, project_id, chat_id):
 
         return redirect("projects:chats", project_id=project_id)
     else:
-        return redirect("main:index")
+        return redirect("projects:index")

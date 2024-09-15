@@ -1,14 +1,5 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 
 
 def index(request):
-    return redirect("main:about")
-
-
-def about(request):
-    context = {
-        "title": "О приложении",
-        "content": "Автоматический мониторинг и уведомление о балансе рекламных аккаунтов. Основная цель — оперативное уведомление пользователей через Telegram о том, что баланс их рекламного аккаунта опустился ниже установленного порогового значения. Это позволяет предотвратить непредвиденные остановки рекламных кампаний и помогает пользователям своевременно предпринимать меры по пополнению баланса, обеспечивая непрерывность и эффективность их рекламных стратегий.",
-    }
-
-    return render(request, "main/about.html", context)
+    return redirect("projects:index")

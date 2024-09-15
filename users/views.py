@@ -20,7 +20,7 @@ def signin(request):
                 if next_url:
                     return redirect(next_url)
 
-                return redirect("main:index")
+                return redirect("projects:index")
     else:
         form = SigninForm()
 
