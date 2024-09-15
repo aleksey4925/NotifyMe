@@ -16,48 +16,28 @@
 <body>
     <div class="container g-0">
         <div class="d-flex flex-column min-vh-100">
-            <nav class="navbar navbar-expand-sm bg-success-subtle border border-top-0 border-success">
-                <div class="container-fluid">
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-lg-0 text-center fw-medium">
-                            {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
+                <nav class="navbar navbar-expand-sm bg-success-subtle border border-top-0 border-success">
+                    <div class="container-fluid">
+                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav me-auto mb-lg-0 text-center fw-medium">
                                 <li class="nav-item">
                                     <a class="nav-link" href="{% url "projects:index" %}">Проекты</a>
                                 </li>
-                            {% endif %}
-                            {% if user.is_admin or user.is_staff %}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{% url "admin:index" %}">Панель управления</a>
-                                </li>
-                            {% endif %}
-                            {% if not user.is_authenticated %}
-                                <li class="nav-item">
-                                    <a class="nav-link d-block d-sm-none" href="{% url "users:signin" %}">Вход</a>
-                                </li>
-                            {% endif %}
-                            {% if user.is_authenticated %}
+                                {% if user.is_admin or user.is_staff %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url "admin:index" %}">Панель управления</a>
+                                    </li>
+                                {% endif %}
                                 <li class="nav-item">
                                     <a class="nav-link d-block d-sm-none" href="{% url "users:signout" %}">Выход</a>
                                 </li>
-                            {% endif %}
-                        </ul>
-                        {% if not user.is_authenticated %}
-                            <div id="signin">
-                                <div class="d-none d-sm-flex">
-                                    <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
-                                        href="{% url "users:signin" %}" data-bs-toggle="tooltip" data-bs-placement="left"
-                                        data-bs-title="Вход">
-                                        <div class="icon-enter fs-3"></div>
-                                    </a>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if user.is_authenticated %}
+                            </ul>
                             <div id="signout">
                                 <div class="d-none d-sm-flex">
                                     <a class="icon-link link-secondary link-underline-secondary link-underline-opacity-0"
@@ -67,10 +47,10 @@
                                     </a>
                                 </div>
                             </div>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            {% endif %}
 
             {% include "includes/notifications.html" %}
 
